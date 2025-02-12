@@ -1,0 +1,491 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "RssFeedApiController",
+        "description": "Managing api endpoints",
+        "version": "1.0"
+    },
+    "paths": {
+        "/api/posts": {
+            "get": {
+                "tags": [
+                    "List of all post"
+                ],
+                "summary": "List of post",
+                "description": "Return data with all posts",
+                "operationId": "getAll",
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/post"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "Store post"
+                ],
+                "summary": "Insert post",
+                "description": "Insert post",
+                "operationId": "create",
+                "requestBody": {
+                    "description": "Data for insert post",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/postStore"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/post"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "return error message",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/error"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "return error message"
+                    }
+                }
+            }
+        },
+        "/api/posts/{id}": {
+            "get": {
+                "tags": [
+                    "Show post by id"
+                ],
+                "summary": "Get specigied post",
+                "description": "Get specigied post",
+                "operationId": "getById",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 43
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/postGet"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "return error message"
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Delete post by id"
+                ],
+                "summary": "Delete post by id",
+                "description": "Delete post by id",
+                "operationId": "delete",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 43
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/delete"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "return error message"
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "Update post by id"
+                ],
+                "summary": "Update post by id",
+                "description": "Update post by id",
+                "operationId": "update",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 43
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "Data for insert post",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/postStore"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/update"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "return error message",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/error"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "return error message"
+                    }
+                }
+            }
+        },
+        "/api/posts/search": {
+            "get": {
+                "tags": [
+                    "Search posts"
+                ],
+                "summary": "search",
+                "description": "Return data with list of posts",
+                "operationId": "search",
+                "requestBody": {
+                    "description": "Post data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/search"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/postData"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "post": {
+                "title": "Post",
+                "description": "Модель поста",
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/postData"
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Post created successfully."
+                    }
+                },
+                "type": "object"
+            },
+            "postData": {
+                "title": "Post",
+                "description": "Модель поста",
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "title": {
+                        "type": "string",
+                        "example": "Laravel"
+                    },
+                    "link": {
+                        "type": "string",
+                        "example": "http://test"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "This is a solid deal..."
+                    },
+                    "pub_date": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-02-12 12:00:00"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-02-12T12:00:00Z"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-02-12T12:30:00Z"
+                    }
+                },
+                "type": "object"
+            },
+            "postStore": {
+                "required": [
+                    "title",
+                    "link",
+                    "pub_date"
+                ],
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "example": "Laravel"
+                    },
+                    "link": {
+                        "type": "string",
+                        "example": "http://test"
+                    },
+                    "description": {
+                        "type": "string",
+                        "example": "Lorem Ipsum...."
+                    },
+                    "pub_date": {
+                        "type": "string",
+                        "format": "date-time",
+                        "example": "2024-02-12 12:00:00"
+                    }
+                },
+                "type": "object"
+            },
+            "postGet": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "$ref": "#/components/schemas/postData"
+                    }
+                },
+                "type": "object"
+            },
+            "error": {
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Title is required (and 2 more errors)"
+                    },
+                    "errors": {
+                        "$ref": "#/components/schemas/validation"
+                    }
+                },
+                "type": "object"
+            },
+            "validation": {
+                "properties": {
+                    "title": {
+                        "type": "string",
+                        "example": "Title is required"
+                    },
+                    "link": {
+                        "type": "string",
+                        "example": "link is required"
+                    },
+                    "pub_date": {
+                        "type": "string",
+                        "example": "pub_date is required"
+                    }
+                },
+                "type": "object"
+            },
+            "update": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Post updated successfully."
+                    }
+                },
+                "type": "object"
+            },
+            "delete": {
+                "properties": {
+                    "success": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "data": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "message": {
+                        "type": "string",
+                        "example": "Post deleted successfully."
+                    }
+                },
+                "type": "object"
+            },
+            "search": {
+                "properties": {
+                    "search": {
+                        "type": "string",
+                        "example": "iPhone"
+                    },
+                    "filters": {
+                        "$ref": "#/components/schemas/postData"
+                    },
+                    "sort": {
+                        "$ref": "#/components/schemas/sort"
+                    },
+                    "per_page": {
+                        "type": "string",
+                        "example": "10"
+                    },
+                    "page": {
+                        "type": "string",
+                        "example": "1"
+                    }
+                },
+                "type": "object"
+            },
+            "sort": {
+                "properties": {
+                    "sort_by": {
+                        "type": "string",
+                        "example": "pub_date"
+                    },
+                    "sort_order": {
+                        "type": "string",
+                        "example": "desk"
+                    }
+                },
+                "type": "object"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "List of all post",
+            "description": "List of all post"
+        },
+        {
+            "name": "Store post",
+            "description": "Store post"
+        },
+        {
+            "name": "Show post by id",
+            "description": "Show post by id"
+        },
+        {
+            "name": "Update post by id",
+            "description": "Update post by id"
+        },
+        {
+            "name": "Delete post by id",
+            "description": "Delete post by id"
+        },
+        {
+            "name": "Search posts",
+            "description": "Search posts"
+        }
+    ]
+}

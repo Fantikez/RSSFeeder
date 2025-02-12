@@ -1,0 +1,88 @@
+services:
+  app:
+    build:
+      args:
+        user: sammy
+        uid: 1000
+      context: ./
+      dockerfile: php8_3/Dockerfile
+    image: rssfeeder_php
+    container_name: php
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ../:/var/www
+    networks:
+      rssfeeder:
+        ipv4_address: 145.23.0.5
+
+  nginx:
+    image: nginx:1.24-alpine
+    container_name: nginx
+    restart: unless-stopped
+    ports:
+      - "8082:80"
+    volumes:
+      - ../:/var/www
+      - ./nginx:/etc/nginx/conf.d
+    depends_on:
+      - app
+      - mariadb
+    networks:
+      rssfeeder:
+        ipv4_address: 145.23.0.6
+
+  mariadb:
+    image: mariadb:11.3.2
+    container_name: mariadb
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: rssfeeder_db
+      MYSQL_USER: rssfeeder
+      MYSQL_PASSWORD: rssfeeder123
+    networks:
+      rssfeeder:
+        ipv4_address: 145.23.0.3
+    ports:
+      - '3306:3306'
+    restart: on-failure
+    volumes:
+      - databaseVolume:/var/lib/mysql
+
+  phpmyadmin:
+    container_name: 'phpmyadmin'
+    image: phpmyadmin/phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8081:80"
+    environment:
+      PMA_HOST: mariadb
+      PMA_PASSWORD: secret
+    depends_on:
+      - mariadb
+    networks:
+      rssfeeder:
+        ipv4_address: 145.23.0.4
+
+  npm:
+    container_name: "npm"
+    image: node:current-alpine
+    volumes:
+      - ../:/var/www/
+    ports:
+      - "${FORWARD_NPM_PORT:-3000}:3000"
+    working_dir: /var/www/
+    entrypoint: [ "npm" ]
+    networks:
+      - rssfeeder
+
+
+volumes:
+  databaseVolume: {}
+networks:
+  rssfeeder:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 145.23.0.0/16
