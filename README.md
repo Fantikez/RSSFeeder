@@ -3,16 +3,17 @@ You need to have `docker` and `docker compose` on your system already installed.
 
 Copy `.env.example` file into newly created `.env`.
 
-Choose `Your_Domain` and add it to `/etc/hosts` file on your OS (Tested on: `Ubuntu 22.04`, `Ubuntu 20.04`)
+Choose `127.0.0.1 rssfeeder.loc` and add it to `/etc/hosts` file on your OS (Tested on: `Ubuntu 22.04`, `Ubuntu 20.04`)
 
-Default domain for the website is: `http://enogamma.loc`
+Default domain for the website is: `http://rssfeeder.loc:8082/`
 
 ## Installation
-1) Change `server_name` in `./docker/nginx/enogamma.conf` to `Your_Domain`.
+1) Change `server_name` in `./docker/nginx/rssfeeder.conf` to `Your_Domain`.
 2) Run `docker compose up -d` for v2+ docker-compose or `docker-compose up -d` for others from `./docker/` directory.
-3) Then run some commands in **PHP (enogamma-php)** container. The container is accessed by `docker exec -ti enogamma-php bash` command. P.s. **sammy** is default user as like magento.
-4) In the **PHP** container you will be on **root (/)** directory of your project. And firstly run `composer install`. Secondly run `php artisan key:generate` for generation `APP_KEY` variable in the `.env` file.
-5) Congrats, you have installed the project.
+3) Then run some commands in **PHP (php)** container. The container is accessed by `docker exec -ti php bash` command. P.s. **sammy** is default user.
+4) In the **PHP** container you will be on **root (/)** directory of your project. And firstly run `composer install`. Secondly run `php artisan key:generate` for generation `APP_KEY` variable in the `.env` file. Next run `php artisan migrate`.
+5) To generate Swagger api documentation run `php artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider"` after that `php artisan l5-swagger:generate`
+6) Congrats, you have installed the project.
 
 ## NPM container commands
 `docker compose run --rm npm run build` - to build Vue.js.
