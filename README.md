@@ -12,8 +12,9 @@ Default domain for the website is: `http://rssfeeder.loc:8082/`
 2) Run `docker compose up -d` for v2+ docker-compose or `docker-compose up -d` for others from `./docker/` directory.
 3) Then run some commands in **PHP (php)** container. The container is accessed by `docker exec -ti php bash` command. P.s. **sammy** is default user.
 4) In the **PHP** container you will be on **root (/)** directory of your project. And firstly run `composer install`. Secondly run `php artisan key:generate` for generation `APP_KEY` variable in the `.env` file. Next run `php artisan migrate`.
-5) To generate Swagger api documentation run `php artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider"` after that `php artisan l5-swagger:generate`
-6) Congrats, you have installed the project.
+5) To generate Swagger api documentation run `php artisan vendor:publish --provider "L5Swagger\L5SwaggerServiceProvider"` after that `php artisan l5-swagger:generate`, url for api documentation `http://rssfeeder.loc:8082/api/documentation#/`
+6) to install cron job `crontab -e` and past this `* * * * * /usr/bin/php /home/viktor/PhpstormProjects/RSSFeeder/artisan fetch:rss-feed  2>&1 | grep -v "Ran jobs by schedule" >> /home/viktor/PhpstormProjects/RSSFeeder/storage/logs/cron.log`
+7) Congrats, you have installed the project.
 
 ## NPM container commands
 `docker compose run --rm npm run build` - to build Vue.js.
